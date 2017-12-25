@@ -1,6 +1,6 @@
 /**************************************************
 *File: mongodb-connect
-*Desc: This file is practice connecting to our mongo db server. we insert, remove, and read from the DB
+*Desc: This file is practice connecting to our mongo db server and inserting
 **************************************************/
 
 /**************************************************
