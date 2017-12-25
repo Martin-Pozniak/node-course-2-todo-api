@@ -27,3 +27,5 @@ var User = mongoose.model('User', {
         required:false
     }
 });
+
+module.exports = {User}
