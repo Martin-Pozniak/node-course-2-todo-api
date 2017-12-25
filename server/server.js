@@ -41,6 +41,16 @@ app.post('/todos', (req,res) => {
     });
 });
 
+app.get('/todos',(req,res) => {
+    Todo.find().then( (todos) => {
+        res.send({
+            todos
+        });
+    }, (e) => {
+        res.statusCode(400).send(e);
+    });
+});
+
 
 /*****************************************************************************************************
 *start the web server on port 3000 localhost
