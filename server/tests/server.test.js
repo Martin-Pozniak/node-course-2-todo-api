@@ -9,10 +9,15 @@ const {Todo} = require('./../models/Todos.js'); //we require the Todo object fro
 *In this case, we are clearing the todos from the db before running the test case to make sure we can properly test
 *the number of items in the collection.
 *****************************************************************************************************/
+const todos = [{
+    text:"First test todo"
+}, {
+    text:"Second test todo"
+}];
 beforeEach( (done) => { 
     Todo.remove({}).then( () => {
-        done();
-    });
+        return Todo.insertMany(todos);
+    }).then( () => done());
 });
 
 /*****************************************************************************************************
@@ -36,7 +41,7 @@ describe("POST /todos", () => {
             .end( (err,res) => { //before we end, we check that the response was actually added to the DB
                 if (err) return done(err);
                 
-                Todo.find().then((todos) => {
+                Todo.find({text}).then((todos) => {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text);
                     done();
@@ -57,11 +62,28 @@ describe("POST /todos", () => {
             .end( (err,res) => {
                 if(err) return done(err);
                 Todo.find().then( (todos) => {
-                    expect(todos.length).toBe(0);
+                    expect(todos.length).toBe(2);
                     done();
-                }).catch( (e) => {done(e)});
+                }).catch( (e) => {done( e)});
             });
 
+    });
+
+});
+
+/*****************************************************************************************************
+*Describe block for the GET request test on todos route
+*****************************************************************************************************/
+describe('GET /todos', () => {
+
+    it('should get all the todos', (done) => {
+        request(app)
+            .get('/todos')
+            .expect(200)
+            .expect( (res) => {
+                expect(res.body.todos.length).toBe(2);
+            })
+            .end(done);
     });
 
 });
