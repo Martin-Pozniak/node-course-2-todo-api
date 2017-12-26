@@ -14,6 +14,8 @@ const express = require('express'); //we put a space between local imports and o
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
+const port = process.eventNames.PORT || 3000;
+
 var {mongoose} = require('./db/mongoose.js'); //we are using es6 destructuring
 var {Todo} = require('./models/Todos.js');
 var {User} = require('./models/Users.js');
@@ -73,8 +75,8 @@ app.get('/todos/:id', (req,res) => {
 /*****************************************************************************************************
 *start the web server on port 3000 localhost
 *****************************************************************************************************/
-app.listen(3000, () => {
-    console.log('Started on port 3000');
+app.listen(port, () => {
+    console.log(`Started At ${port}`);
 });
 
 module.exports = {app};
