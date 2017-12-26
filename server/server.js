@@ -12,6 +12,7 @@
 *****************************************************************************************************/
 const express = require('express'); //we put a space between local imports and ones from our dependencies
 const bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose.js'); //we are using es6 destructuring
 var {Todo} = require('./models/Todos.js');
@@ -47,8 +48,25 @@ app.get('/todos',(req,res) => {
             todos
         });
     }, (e) => {
-        res.statusCode(400).send(e);
+        res.status(400).send(e);
     });
+});
+
+//GET /todos/id
+app.get('/todos/:id', (req,res) => {
+
+    var id = req.params.id;
+
+    if(!ObjectID.isValid(id)) 
+        return res.status(404).send("Invalid ID");
+
+    Todo.findById({_id:id}).then( (todo) => {
+        if(!todo) return res.status(404).send();
+        res.send({
+            todo
+        });
+    }), (e) => res.status(400).send(e);
+
 });
 
 
