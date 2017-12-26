@@ -14,7 +14,7 @@ const express = require('express'); //we put a space between local imports and o
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
-const port = process.eventNames.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 var {mongoose} = require('./db/mongoose.js'); //we are using es6 destructuring
 var {Todo} = require('./models/Todos.js');
