@@ -1,5 +1,6 @@
 const expect = require('expect'); //expect is a module used to create assertions. assertions are test cases that help us simplify the process of writing complicated if else blocks to test code
 const request = require('supertest'); //request by supertest is used to help us easy made http requests so that we can test the code.
+const {ObjectID} = require('mongodb');
 
 const {app} = require('./../server.js'); //we require app from the server.js file
 const {Todo} = require('./../models/Todos.js'); //we require the Todo object from the Todos.js file | it cointains a mongoose model that is used to add things to the database.
@@ -10,8 +11,10 @@ const {Todo} = require('./../models/Todos.js'); //we require the Todo object fro
 *the number of items in the collection.
 *****************************************************************************************************/
 const todos = [{
+    _id: new ObjectID,
     text:"First test todo"
 }, {
+    _id: new ObjectID,
     text:"Second test todo"
 }];
 beforeEach( (done) => { 
@@ -83,6 +86,37 @@ describe('GET /todos', () => {
             .expect( (res) => {
                 expect(res.body.todos.length).toBe(2);
             })
+            .end(done);
+    });
+
+});
+
+/*****************************************************************************************************
+*Describe block for the GET request test on todos/id route
+*****************************************************************************************************/
+describe('GET /todos/:id', () => {
+
+    it('should return a todo doc', (done) => {
+        request(app)
+            .get(`/todos/${todos[0]._id.toHexString()}`)
+            .expect(200)
+            .expect( (res) => {
+                expect(res.body.todo.text).toBe(todos[0].text);
+            })
+            .end(done);
+    });
+
+    it('should return 404 if todo not found', (done) => {
+        request(app)
+            .get("/todos/5a4194ded1495c3608d06158")
+            .expect(404)
+            .end(done);
+    });
+
+    it('should return 404 for non-object IDs', (done) => {
+        request(app)
+            .get("/todos/123")
+            .expect(404)
             .end(done);
     });
 
