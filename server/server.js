@@ -76,6 +76,7 @@ app.get('/todos/:id', (req,res) => {
 *start the web server on port 3000 localhost
 *****************************************************************************************************/
 app.listen(port, () => {
+    console.log("About to start server!");
     console.log(`Started At ${port}`);
 });
 
